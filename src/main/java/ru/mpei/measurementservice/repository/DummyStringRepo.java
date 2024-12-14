@@ -1,27 +1,26 @@
 package ru.mpei.measurementservice.repository;
 
 import org.springframework.stereotype.Component;
-import ru.mpei.measurementservice.model.DataItem;
+import ru.mpei.measurementservice.model.DataItemDto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class DummyStringRepo {
 
-    private List<DataItem> storage = new ArrayList<>(
-            List.of(new DataItem("hello", 2.0), new DataItem("str2", 4.0)));
+    private List<DataItemDto> storage = new ArrayList<>(
+            List.of(new DataItemDto("hello", 2.0), new DataItemDto("str2", 4.0)));
 
-    public void add(DataItem di){
+    public void add(DataItemDto di){
         storage.add(di);
     }
 
-    public List<DataItem> getAll(){
+    public List<DataItemDto> getAll(){
         return storage;
     }
 
-    public boolean remove(DataItem di){
+    public boolean remove(DataItemDto di){
         return storage.remove(di);
     }
 
@@ -34,9 +33,9 @@ public class DummyStringRepo {
     }
 
     public Double getValueByTag(String tag){
-        for (DataItem dataItem : storage) {
-            if (dataItem.getTag().equals(tag)){
-                return dataItem.getValue();
+        for (DataItemDto dataItemDto : storage) {
+            if (dataItemDto.getTag().equals(tag)){
+                return dataItemDto.getValue();
             }
         }
         return null;

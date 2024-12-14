@@ -2,14 +2,14 @@ package ru.mpei.measurementservice.model;
 
 import java.util.Objects;
 
-public class DataItem {
+public class DataItemDto {
     private String tag;
     private double value;
 
-    public DataItem() {
+    public DataItemDto() {
     }
 
-    public DataItem(String tag, double value) {
+    public DataItemDto(String tag, double value) {
         this.tag = tag;
         this.value = value;
     }
@@ -34,8 +34,8 @@ public class DataItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DataItem dataItem = (DataItem) o;
-        return Double.compare(value, dataItem.value) == 0 && Objects.equals(tag, dataItem.tag);
+        DataItemDto dataItemDto = (DataItemDto) o;
+        return Double.compare(value, dataItemDto.value) == 0 && Objects.equals(tag, dataItemDto.tag);
     }
 
     @Override
