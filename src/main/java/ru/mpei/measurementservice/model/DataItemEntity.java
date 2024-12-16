@@ -16,6 +16,14 @@ public class DataItemEntity {
     @Column
     private String tag;
 
+    public DataItemEntity(long id, double value, String tag) {
+        this.id = id;
+        this.value = value;
+        this.tag = tag;
+    }
+
+    public DataItemEntity() {
+    }
 
     @Override
     public boolean equals(Object o) {

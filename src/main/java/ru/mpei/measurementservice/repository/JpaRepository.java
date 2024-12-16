@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mpei.measurementservice.model.DataItemDto;
 import ru.mpei.measurementservice.model.DataItemEntity;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JpaRepository {
@@ -25,11 +27,11 @@ public class JpaRepository {
     }
 
     @Transactional(readOnly = true)
-    public DataItemEntity get(String tag){
+    public Optional<DataItemEntity> get(String tag){
 
         return em.createQuery("select p from DataItemEntity p where p.tag = :tag", DataItemEntity.class)
                 .setParameter("tag", tag)
-                .getSingleResult();
+                .getResultStream().findAny();
     }
 
     @Transactional
@@ -38,6 +40,16 @@ public class JpaRepository {
                 .setParameter("param", tag)
                 .executeUpdate();
         return param;
+    }
+
+    @Transactional
+    public void deleteAll(){
+        em.createQuery("delete from DataItemEntity").executeUpdate();
+    }
+
+    public List<DataItemEntity> getAll(){
+        return em.createQuery("select p from DataItemEntity p", DataItemEntity.class)
+                .getResultList();
     }
 
 

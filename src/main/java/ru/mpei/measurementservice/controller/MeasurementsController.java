@@ -7,6 +7,7 @@ import ru.mpei.measurementservice.model.DataItemDto;
 import ru.mpei.measurementservice.model.DataItemEntity;
 import ru.mpei.measurementservice.repository.DummyStringRepo;
 import ru.mpei.measurementservice.repository.JpaRepository;
+import ru.mpei.measurementservice.service.MeasurementService;
 
 import java.util.List;
 
@@ -14,42 +15,33 @@ import java.util.List;
 public class MeasurementsController {
 
     @Autowired
-    private DummyStringRepo repo;
+    private MeasurementService service;
 
-    @Autowired
-    private JpaRepository jpaRepo;
 
     @GetMapping("/data")
     public List<DataItemDto> getAllData(){
-        return repo.getAll();
+        return service.getAll();
     }
 
     @GetMapping("data/value")
     public ResponseEntity<DataItemDto> getValueByTag(@RequestParam String tag){
-        DataItemEntity entity = jpaRepo.get(tag);
-//        Double valueByTag = repo.getValueByTag(tag);
-        if (entity == null){
+        DataItemDto dto = service.getByTag(tag);
+        if (dto == null){
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(new DataItemDto(entity.getTag(), entity.getValue()));
+            return ResponseEntity.ok(dto);
         }
     }
 
 
     @PostMapping("/data")
     public void save(@RequestBody DataItemDto item){
-//        repo.add(item);
-        DataItemEntity dte = new DataItemEntity();
-        dte.setTag(item.getTag());
-        dte.setValue(item.getValue());
-        jpaRepo.save(dte);
+        service.save(item);
     }
 
     @DeleteMapping("/data")
     public ResponseEntity<?> delete(@RequestBody DataItemDto item){
-//        boolean res = repo.remove(item);
-        int res = jpaRepo.delete(item.getTag());
-        if (res > 0){
+        if (service.delete(item)){
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
@@ -59,17 +51,17 @@ public class MeasurementsController {
 
     @DeleteMapping("/all")
     public void delete(){
-        repo.removeAll();
+        service.deleteAll();
     }
 
 
-    @GetMapping("/data/id")
-    public ResponseEntity<DataItemDto> getById(@RequestParam long id){
-        DataItemEntity entity = jpaRepo.get(id);
-        if (entity == null){
-            return ResponseEntity.notFound().build();
-        }
-        DataItemDto dto = new DataItemDto(entity.getTag(), entity.getValue());
-        return ResponseEntity.ok(dto);
-    }
+//    @GetMapping("/data/id")
+//    public ResponseEntity<DataItemDto> getById(@RequestParam long id){
+//        DataItemEntity entity = jpaRepo.get(id);
+//        if (entity == null){
+//            return ResponseEntity.notFound().build();
+//        }
+//        DataItemDto dto = new DataItemDto(entity.getTag(), entity.getValue());
+//        return ResponseEntity.ok(dto);
+//    }
 }
